@@ -17,8 +17,7 @@ const productSchema = new Schema({
         required:true
     },
     category:{
-        type:String,
-        unique:true
+        type:String
     },
     status:{
         type:Boolean,

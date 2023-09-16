@@ -1,7 +1,19 @@
 import { Router } from "express";
-import { cartModel } from "../models/carts.models";
-import { productModel } from "../models/products.models";
+import { cartModel } from "../models/carts.models.js";
+import { productModel } from "../models/products.models.js";
 const cartsRouter = Router();
+cartsRouter.get('/',async(req,res)=>{
+    const{limit} = req.query;
+    try {
+        const carts = await cartModel.find().limit(limit);
+        if (carts)
+            res.status(200).send({ respuesta: 'OK', mensaje: carts })
+        else
+            res.status(404).send({ respuesta: 'Error en consultar los Carritos', mensaje: 'Not Found' })
+    } catch (error) {
+        res.status(400).send({ respuesta: 'Error en consulta de carritos', mensaje: error })
+    }
+});
 cartsRouter.get('/:cid',async(req,res)=>{
     try{
         const cart = await cartModel.findById(req.params.cid);
@@ -17,7 +29,7 @@ cartsRouter.get('/:cid',async(req,res)=>{
 });
 cartsRouter.post('/',async(req,res)=>{
     try {
-        const msgResp = await cartModelt.create();
+        const msgResp = await cartModel.create({});
         res.status(200).send({resp:'Ok',message:msgResp});
     } catch (error) {
         res.status(400).send({resp:'Error en Crear Carrito',message:error})
