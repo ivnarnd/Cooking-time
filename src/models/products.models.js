@@ -32,4 +32,4 @@ const productSchema = new Schema({
     thumbnail:[]
     
 });
-export const userModel = model('users',productSchema);
+export const productModel = model('products',productSchema);
