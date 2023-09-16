@@ -44,13 +44,13 @@ cartsRouter.post('/:cid/product/:pid',async (req,resp)=>{
             const prod = await productModel.findById(pid);
             if(prod){
                 const indice = cart.products.findIndex(item => item.id_prod == pid)
-                if (indice != -1) {
+                if (indice !== -1) {
                     cart.products[indice].quantity = quantity;
                 } else {
                     cart.products.push({ id_prod: pid, quantity: quantity });
                 }
-                const res = await cartModel.findByIdAndUpdate(cid, cart);
-                res.status(200).send({ respuesta: 'OK', mensaje: res });
+                const resUp = await cartModel.findByIdAndUpdate(cid, cart);
+                resp.status(200).send({ respuesta: 'OK', mensaje: resUp });
             }else{
                 resp.status(404).send({res:'Error en Agregar producto',message:`El Producto con el id ${pid} no existe`})
             }
