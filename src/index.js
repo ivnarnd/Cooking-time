@@ -17,22 +17,36 @@ const server = app.listen(PORT,()=>console.log(`Servidor corriendo en puerto:${P
 
 const io = new Server(server);
 
+const msgs = [];
 io.on('connection',(socket)=>{
     console.log('Servidor socket io conectado');
     socket.on('hello',(msg)=>{
         console.log(msg);
     });
+    socket.on('msg', (infoMesage) => {
+        console.log(infoMesage);
+        msgs.push(infoMesage);
+        socket.emit('mesages', msgs);
+    });
 });
+
+
+
+
+
 app.engine('handlebars', engine()) //Defino que motor de plantillas voy a utilizar y su config
 app.set('view engine', 'handlebars') //Setting de mi app de hbs
 app.set('views', path.resolve(__dirname, './views')) //Resolver rutas absolutas a traves de rutas relativas
 app.use('/static', express.static(path.join(__dirname, '/public'))) //Unir rutas en una sola concatenandolas
-mongoose.connect(`mongodb+srv://ivnarnd:@cluster0.3ykyt9n.mongodb.net/?retryWrites=true&w=majority`).then(()=>console.log('DB is connected')).catch((error)=>console.log('Error in connection',error));
+mongoose.connect(`mongodb+srv://ivnarnd:Coderhouse@cluster0.3ykyt9n.mongodb.net/?retryWrites=true&w=majority`).then(()=>console.log('DB is connected')).catch((error)=>console.log('Error in connection',error));
 
 app.use('/api/users',userRouter);
 app.use('/api/products',prodsRouter);
 app.use('/api/carts',cartsRouter);
 app.get('/static',(req,res)=>{
-    res.render('webchat');
+    res.render('webchat',{
+        css:'style.css',
+        title:'chat'
+    });
 })
 
