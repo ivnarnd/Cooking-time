@@ -13,22 +13,23 @@ Swal.fire({
     },
     allowOutsideClick: false
 }).then(resultado => {
-    user = resultado.value
-    console.log(user)
+    user = resultado.value;
 });
 btnChat.addEventListener('click', () => {
     let date = new Date().toLocaleString()
 
     if (inputChat.value.trim().length > 0) {
-        socket.emit('msg', { date: date, user: user, mesage: inputChat.value });
+        socket.emit('msg', { user: user, mesage: inputChat.value,date: date });
         inputChat.value = "";
         socket.on();
     }
 })
 
 socket.on('mesages', (arrayMsg) => {
+    let msgs = [];
     collectionMsg.innerHTML = "";
     arrayMsg.forEach(msg => {
-        collectionMsg.innerHTML += `<p>${msg.date}: el usuario ${msg.user} escribio ${msg.mesage} </p>`;
+        console.log(msg)
+        collectionMsg.innerHTML += `<p>${msg.postTime}: el usuario ${msg.email} escribio ${msg.message} </p>`;
     });
 });
