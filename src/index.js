@@ -39,7 +39,7 @@ app.engine('handlebars', engine()) //Defino que motor de plantillas voy a utiliz
 app.set('view engine', 'handlebars') //Setting de mi app de hbs
 app.set('views', path.resolve(__dirname, './views')) //Resolver rutas absolutas a traves de rutas relativas
 app.use('/static', express.static(path.join(__dirname, '/public'))) //Unir rutas en una sola concatenandolas
-mongoose.connect(`mongodb+srv://ivnarnd:@cluster0.3ykyt9n.mongodb.net/?retryWrites=true&w=majority`).then(()=>console.log('DB is connected')).catch((error)=>console.log('Error in connection',error));
+mongoose.connect(`mongodb+srv://ivnarnd:Coderhouse@cluster0.3ykyt9n.mongodb.net/?retryWrites=true&w=majority`).then(()=>console.log('DB is connected')).catch((error)=>console.log('Error in connection',error));
 
 app.use('/api/users',userRouter);
 app.use('/api/products',prodsRouter);

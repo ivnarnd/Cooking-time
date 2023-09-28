@@ -2,9 +2,11 @@ import { Router } from "express";
 import { productModel } from "../models/products.models.js";
 const prodsRouter = Router();
 prodsRouter.get('/',async(req,res)=>{
-    const{limit} = req.query;
+    const{limit,page,query,sort} = req.query;
+    const pageS = page && 1;
+    const limitS = limit && 10;
     try {
-        const prods = await productModel.find().limit(limit);
+        const prods = await productModel.paginate({query:query},{limit:limitS,page:pageS,sort:sort});
         res.status(200).send({resp:'Ok',message:prods});
     } catch (error) {
         res.status(400).send({resp:'Error en consultar Productos',message:error})
