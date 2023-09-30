@@ -3,12 +3,13 @@ import { productModel } from "../models/products.models.js";
 const prodsRouter = Router();
 prodsRouter.get('/',async(req,res)=>{
     const{limit,page,query,value,sort} = req.query;
+    const sortS = sort? sort:'';
     const pageS = page? page : 1;
     const limitS = limit?limit:10;
     const queryS = {};
     queryS[query]=value;
     try {
-        const prods = await productModel.paginate(queryS,{limit:limitS,page:pageS,sort:{ price:`${sort}`} });
+        const prods = await productModel.paginate(queryS,{limit:limitS,page:pageS,sort:{ price:`${sortS}`}});
         res.status(200).send({resp:'Ok',message:prods});
     } catch (error) {
         res.status(400).send({resp:'Error en consultar Productos',message:error})
