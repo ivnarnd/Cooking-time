@@ -86,4 +86,48 @@ cartsRouter.post('/:cid/product/:pid',async (req,resp)=>{
         resp.status(400).send({res:'Error en Agregar producto al carrito',message:error});
     }
 });
+cartsRouter.put('/:cid',async (req,resp)=>{
+    let {cid} = req.params;
+    let {products} = req.body;
+    try{
+        let cart = await cartModel.findById(cid);
+        if(cart){
+            cart.products = products;
+            const resUp = await cartModel.findByIdAndUpdate(cid, cart);
+            resp.status(200).send({ respuesta: 'OK', mensaje: resUp });
+        }else{
+            resp.status(404).send({res:'Error en Agregar productos',message:`El Carrito con el id ${cid} no existe`});
+        }
+    }
+    catch(error){
+        resp.status(400).send({res:'Error en Agregar productos al carrito',message:error});
+    }
+});
+cartsRouter.put('/:cid/products/:pid',async (req,resp)=>{
+    let {cid,pid} = req.params;
+    let {quantity} = req.body;
+    try{
+        let cart = await cartModel.findById(cid);
+        if(cart){
+            const prod = await productModel.findById(pid);
+            if(prod){
+                const indice = cart.products.findIndex(item => item.id_prod == pid)
+                if (indice !== -1) {
+                    cart.products[indice].quantity = quantity;
+                    const resUp = await cartModel.findByIdAndUpdate(cid, cart);
+                    resp.status(200).send({ respuesta: 'OK', mensaje: resUp });
+                }else{
+                    resp.status(404).send({res:'Error en Editar producto',message:`El Producto con el id ${pid} no existe en el carrito`});
+                }
+            }
+            else{
+                resp.status(404).send({res:'Error en Editar producto',message:`El Producto con el id ${pid} no existe`})
+            }
+        }else{
+            resp.status(404).send({res:'Error en Editar producto',message:`El Carrito con el id ${cid} no existe`});
+        }
+    }catch(error){
+        resp.status(400).send({res:'Error en Editar producto',message:error});
+    }
+});
 export default cartsRouter;
