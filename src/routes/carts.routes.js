@@ -35,6 +35,31 @@ cartsRouter.post('/',async(req,res)=>{
         res.status(400).send({resp:'Error en Crear Carrito',message:error})
     }
 });
+cartsRouter.delete('/:cid/products/:pid',async (req,resp)=>{
+    let {cid,pid} = req.params;
+    try{
+        let cart = await cartModel.findById(cid);
+        if(cart){
+            const prod = await productModel.findById(pid);
+            if(prod){
+                const indice = cart.products.findIndex(item => item.id_prod == pid)
+                if (indice !== -1) {
+                    cart.products = cart.products.filter((el)=> el.id_prod != pid );
+                    const resUp = await cartModel.findByIdAndUpdate(cid, cart);
+                    resp.status(200).send({ respuesta: 'OK', mensaje: resUp });
+                } else {
+                    resp.status(404).send({res:'Error en Eliminar producto',message:`El Producto con el id ${pid} no existe en el carrito`})
+                }
+            }else{
+                resp.status(404).send({res:'Error en Eliminar producto',message:`El Producto con el id ${pid} no existe`})
+            }
+        }else{
+            resp.status(404).send({res:'Error en Eliminar producto',message:`El Carrito con el id ${cid} no existe`});
+        }
+    }catch(error){
+        resp.status(400).send({res:'Error en Eliminar producto al carrito',message:error});
+    }
+});
 cartsRouter.post('/:cid/product/:pid',async (req,resp)=>{
     let {cid,pid} = req.params;
     let {quantity} = req.body;
@@ -60,8 +85,5 @@ cartsRouter.post('/:cid/product/:pid',async (req,resp)=>{
     }catch(error){
         resp.status(400).send({res:'Error en Agregar producto al carrito',message:error});
     }
-    
-   
-    
 });
 export default cartsRouter;
