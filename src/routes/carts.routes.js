@@ -16,7 +16,7 @@ cartsRouter.get('/',async(req,res)=>{
 });
 cartsRouter.get('/:cid',async(req,res)=>{
     try{
-        const cart = await cartModel.findById(req.params.cid);
+        const cart = await cartModel.findById(req.params.cid).populate('products.id_prod');
         if(cart){
             res.status(200).send({resp:'Ok',message:cart});
         }else{
