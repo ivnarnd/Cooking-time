@@ -1,14 +1,17 @@
 import {Schema,model} from "mongoose";
 const userSchema = new Schema({
-    name:{
+    first_name:{
         type:String,
         required:true
     },
-    lastName:{
+    last_name:{
         type:String,
         required:true
     },
-    age:Number,
+    age:{
+        type:Number,
+        required:true
+    },
     email:{
         type:String,
         unique:true,
@@ -17,6 +20,10 @@ const userSchema = new Schema({
     password:{
         type:String,
         required:true
+    },
+    rol:{
+        type:String,
+        default:'user'
     }
     
 });

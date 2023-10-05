@@ -28,9 +28,9 @@ userRouter.get('/:id',async(req,res)=>{
 });
 
 userRouter.post('/',async(req,res)=>{
-    const {name,lastname,age,email,password} = req.body;
+    const {first_name,last_name,age,email,password} = req.body;
     try {
-        const msgResp = await userModel.create({name,lastname,age,email,password});
+        const msgResp = await userModel.create({first_name,last_name,age,email,password});
         res.status(200).send({resp:'Ok',message:msgResp});
     } catch (error) {
         res.status(400).send({resp:'Error en agregar Usuario',message:error})
@@ -40,9 +40,9 @@ userRouter.post('/',async(req,res)=>{
 
 userRouter.put('/:id',async(req,res)=>{
     const {id} = req.params;
-    const {name,lastname,age,email,password} = req.body;
+    const {first_name,last_name,age,email,password} = req.body;
     try {
-        const user = await userModel.findByIdAndUpdate(id,{name,lastname,age,email,password});
+        const user = await userModel.findByIdAndUpdate(id,{first_name,last_name,age,email,password});
         if(user){
             res.status(200).send({resp:'Ok',message:user});
         }else{
