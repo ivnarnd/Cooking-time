@@ -84,6 +84,13 @@ app.use('/static/login',(req,res)=>{
         script:'login.js'
     });
 });
+app.use('/static/signup',(req,res)=>{
+    res.render('signup',{
+        css:'style.css',
+        title:'Signup',
+        script:'signup.js'
+    });
+});
 app.get('/static',(req,res)=>{
     res.render('webchat',{
         css:'style.css',
