@@ -77,10 +77,18 @@ app.use('/api/users',userRouter);
 app.use('/api/products',prodsRouter);
 app.use('/api/carts',cartsRouter);
 app.use('/api/sessions',sessionRouter);
+app.use('/static/login',(req,res)=>{
+    res.render('loginform',{
+        css:'style.css',
+        title:'Login',
+        script:'login.js'
+    });
+});
 app.get('/static',(req,res)=>{
     res.render('webchat',{
         css:'style.css',
-        title:'chat'
+        title:'chat',
+        script:'script.js'
     });
 });
 
