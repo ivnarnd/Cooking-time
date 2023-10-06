@@ -99,4 +99,11 @@ app.get('/static',(req,res)=>{
     });
 });
 
+app.get('/static/products',(req,res)=>{
+    res.render('products',{
+        css:'style.css',
+        title:'Products',
+        script:'products.js'
+    });
+});
 

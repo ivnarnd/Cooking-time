@@ -31,7 +31,7 @@ userRouter.post('/',async(req,res)=>{
     const {first_name,last_name,age,email,password} = req.body;
     try {
         const msgResp = await userModel.create({first_name,last_name,age,email,password});
-        res.status(200).send({resp:'Ok',message:msgResp});
+        res.redirect(302,'/static/login');
     } catch (error) {
         res.status(400).send({resp:'Error en agregar Usuario',message:error})
     }

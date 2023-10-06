@@ -7,13 +7,13 @@ sessionRouter.post('/login',async(req,res)=>{
     const {email,password} = req.body;
     try{
         if(req.session.login){
-            res.status(200).send({result:'Login existente'});
+            res.redirect(302,'/api/products');//TODO:futura vista de products
         }else{
             const user = await userModel.findOne({email:email});
             if (user){
                 if (user.password === password){
                     req.session.login = true;
-                    res.status(200).send({result:'Login Ok',message:user});
+                    res.redirect(302,'/api/products'); //TODO:futura vista de products
                 }else{
                     res.status(401).send({result:'Unauthorized',message:password});
                 }
@@ -30,7 +30,7 @@ sessionRouter.get('/logout',async(req,res)=>{
     if(req.session.login){
         req.session.destroy();
     }
-    res.status(200).send({result:'Usuario Deslogueado'});
+    res.status(200).send({message:'logout realizado con exito'});
 });
 
 export default sessionRouter;

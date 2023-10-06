@@ -9,8 +9,10 @@ form.addEventListener('submit', (e) => {
             'Content-Type': 'application/json', // Indica que estás enviando datos en formato JSON
         },
         body:JSON.stringify({...prod}), // body data type must match "Content-Type" header
-      })
-      .then(data=> data.json())
-      .then(dataParsed => console.log(dataParsed));
+    }).then(resp=>{
+        if(resp.redirected){
+            window.location.href = resp.url;
+        }
+    });
     
 });
