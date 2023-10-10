@@ -32,7 +32,7 @@ sessionRouter.get('/logout',async(req,res)=>{
     if(req.session.login){
         req.session.destroy();
     }
-    res.status(200).send({message:'logout realizado con exito'});
+    res.redirect(302,'/static/login');
 });
 
 export default sessionRouter;
