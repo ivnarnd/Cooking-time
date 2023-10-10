@@ -77,6 +77,7 @@ app.use('/api/users',userRouter);
 app.use('/api/products',prodsRouter);
 app.use('/api/carts',cartsRouter);
 app.use('/api/sessions',sessionRouter);
+
 app.use('/static/login',(req,res)=>{
     res.render('loginform',{
         css:'style.css',
@@ -105,5 +106,14 @@ app.get('/static/products',(req,res)=>{
         title:'Products',
         script:'products.js'
     });
+});
+
+app.get('/static/profile',(req,res)=>{
+    res.render('profile',{
+        css:'Style.css',
+        title:'Profile',
+        script:'profile.js',
+        user:req.session.infoUser
+    })
 });
 

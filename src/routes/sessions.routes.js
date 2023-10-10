@@ -12,7 +12,9 @@ sessionRouter.post('/login',async(req,res)=>{
             const user = await userModel.findOne({email:email});
             if (user){
                 if (user.password === password){
+                    let infoUser = { name:user.first_name,lastname:user.last_name,age:user.age,email:user.email};
                     req.session.login = true;
+                    req.session.infoUser=infoUser;
                     res.redirect(302,'/static/products'); //TODO:futura vista de products
                 }else{
                     res.status(401).send({result:'Unauthorized',message:password});
