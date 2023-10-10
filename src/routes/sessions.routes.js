@@ -13,6 +13,9 @@ sessionRouter.post('/login',async(req,res)=>{
             if (user){
                 if (user.password === password){
                     let infoUser = { name:user.first_name,lastname:user.last_name,age:user.age,email:user.email};
+                    if(user.rol == "admin"){
+                        req.session.admin = true;
+                    }
                     req.session.login = true;
                     req.session.infoUser=infoUser;
                     res.redirect(302,'/static/products');
