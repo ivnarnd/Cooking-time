@@ -78,21 +78,35 @@ app.use('/api/products',prodsRouter);
 app.use('/api/carts',cartsRouter);
 app.use('/api/sessions',sessionRouter);
 
-app.use('/static/login',(req,res)=>{
+//funcion de autenticacion de session
+function auth(req, res, next) {
+ if (req.session?.infoUser) {
+   return next()
+ }
+ return res.status(401).send('error de autorización!')
+}
+function authLog(req,res,next){
+    if(!req.session?.login){
+        return next()
+    }
+    return res.redirect(302,'/static/products');
+}
+
+app.use('/static/login',authLog,(req,res)=>{
     res.render('loginform',{
         css:'style.css',
         title:'Login',
         script:'login.js'
     });
 });
-app.use('/static/signup',(req,res)=>{
+app.use('/static/signup',authLog,(req,res)=>{
     res.render('signup',{
         css:'style.css',
         title:'Signup',
         script:'signup.js'
     });
 });
-app.get('/static',(req,res)=>{
+app.get('/static',auth,(req,res)=>{
     res.render('webchat',{
         css:'style.css',
         title:'chat',
@@ -100,7 +114,7 @@ app.get('/static',(req,res)=>{
     });
 });
 
-app.get('/static/products',(req,res)=>{
+app.get('/static/products',auth,(req,res)=>{
     res.render('products',{
         css:'style.css',
         title:'Products',
@@ -108,7 +122,7 @@ app.get('/static/products',(req,res)=>{
     });
 });
 
-app.get('/static/profile',(req,res)=>{
+app.get('/static/profile',auth,(req,res)=>{
     res.render('profile',{
         css:'Style.css',
         title:'Profile',
