@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { userModel } from "../models/users.models.js";
-
+import {validatePassword} from '../utils/utils.js';
 const sessionRouter = Router();
 
 sessionRouter.post('/login',async(req,res)=>{
@@ -11,7 +11,7 @@ sessionRouter.post('/login',async(req,res)=>{
         }else{
             const user = await userModel.findOne({email:email});
             if (user){
-                if (user.password === password){
+                if (validatePassword(user,password)){
                     let infoUser = { name:user.first_name,lastname:user.last_name,age:user.age,email:user.email};
                     if(user.rol == "admin"){
                         req.session.admin = true;

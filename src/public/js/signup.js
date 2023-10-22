@@ -20,6 +20,6 @@ form.addEventListener('submit', (e) => {
             showConfirmButton: true,
             timer: 1500
         })
-      }).catch(err=>console.err(err));
+      }).catch(err=>console.log(err));
     
 });

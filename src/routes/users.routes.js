@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userModel } from "../models/users.models.js";
+import {createHash} from '../utils/utils.js';
 
 const userRouter = Router();
 userRouter.get('/',async(req,res)=>{
@@ -30,9 +31,16 @@ userRouter.get('/:id',async(req,res)=>{
 userRouter.post('/',async(req,res)=>{
     const {first_name,last_name,age,email,password} = req.body;
     try {
-        const msgResp = await userModel.create({first_name,last_name,age,email,password});
+        const msgResp = await userModel.create({first_name:first_name,
+            last_name:last_name,
+            age:age,
+            email:email,
+            password:createHash(password)
+        });
+        console.log(msgResp);
         res.redirect(302,'/static/login');
     } catch (error) {
+        console.log(error);
         res.status(400).send({resp:'Error en agregar Usuario',message:error})
     }
 
