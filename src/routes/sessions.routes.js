@@ -7,33 +7,21 @@ const sessionRouter = Router();
 sessionRouter.post('/register',passport.authenticate('register'),async(req,res)=>{
     res.send({status:'sucess',message:'Usuario logueado'});
 });
-sessionRouter.post('/login',async(req,res)=>{
-    const {email,password} = req.body;
+sessionRouter.post('/login',passport.authenticate('login'),async(req,res)=>{
     try{
         if(req.session.login){
             res.redirect(302,'/static/products')
         }else{
-            const user = await userModel.findOne({email:email});
-            if (user){
-                if (validatePassword(user,password)){
-                    let infoUser = {
-                         name:user.first_name,
-                         lastname:user.last_name,
-                         age:user.age,
-                         email:user.email
-                        };
-                    if(user.rol == "admin"){
-                        req.session.admin = true;
-                    }
-                    req.session.login = true;
-                    req.session.infoUser=infoUser;
-                    res.redirect(302,'/static/products');
-                }else{
-                    res.status(401).send({result:'Unauthorized',message:password});
-                }
-            }else{
-                res.status(400).send({result:'Not Found',message:user});
+            if(!req.user){
+                return res.status(400).send({status:'error',message:"Credenciales erroneas"})
             }
+            req.session.user = {
+                first_name : req.user.first_name,
+                last_name : req.user.last_name,
+                email:req.user.email,
+                age:req.user.age
+            }
+            res.redirect(302,'/static/products');
         }
     }catch(err){
         res.status(400).send({error:`Error en login:${err}`});
