@@ -1,8 +1,12 @@
 import { Router } from "express";
 import { userModel } from "../models/users.models.js";
 import {validatePassword} from '../utils/utils.js';
+import passport from "passport";
 const sessionRouter = Router();
-
+//ruta de registro de usuario
+sessionRouter.post('/register',passport.authenticate('register'),async(req,res)=>{
+    res.send({status:'sucess',message:'Usuario logueado'});
+});
 sessionRouter.post('/login',async(req,res)=>{
     const {email,password} = req.body;
     try{

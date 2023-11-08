@@ -74,7 +74,7 @@ app.use(session({
 }));
 //configuracion de passport
 initializePassport();
-app.use(passsport.initialize());
+app.use(passport.initialize());
 app.use(passport.session());
 //routes
 app.use('/api/users',userRouter);

@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
-import { userModel } from "../models/users.models";
-import { createHash,validatePassword } from "../utils/utils";
+import { userModel } from "../models/users.models.js";
+import { createHash,validatePassword } from "../utils/utils.js";
 const localStrategy = local.Strategy;
 const initializePassport = ()=>{
     //done sera el callback de resolucion de passport, el primer argumento es para error y el segundo para el usuario.
