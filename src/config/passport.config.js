@@ -32,6 +32,26 @@ const initializePassport = ()=>{
             }
         }
     ));
+    passport.use('login',new localStrategy(
+       {usernameField:'email'},
+       async(username,password,done)=>{
+           try {
+               let user = await userModel.findOne({email:username});
+               if (!user){
+                   return done(null,false);//no se encontro un usuario ya registrado
+               }
+               //sino
+               if(!validatePassword(user,password)){
+                    return done(null,false);
+               }
+               //si todo salio correctamente
+               done(null,user);
+           } catch (error) {
+               //si tengo un error 
+               return done('error en registrar usuario'+error); 
+           }
+       }
+   ));
     //serializacion de usuario
     passport.serializeUser((user,done)=>{
         done(null,user._id);
