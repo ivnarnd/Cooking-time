@@ -31,6 +31,11 @@ const initializePassport = ()=>{
                 return done('error en registrar usuario'+error); 
             }
         }
-    ))
+    ));
+    //serializacion de usuario
+    passport.serializeUser((user,done)=>{
+        done(null,user._id);
+    });
+
 }
 export default initializePassport;
