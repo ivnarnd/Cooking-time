@@ -31,13 +31,14 @@ userRouter.get('/:id',async(req,res)=>{
 userRouter.post('/',async(req,res)=>{
     const {first_name,last_name,age,email,password} = req.body;
     try {
-        const msgResp = await userModel.create({first_name:first_name,
+        const msgResp = await userModel.create({
+            first_name:first_name,
             last_name:last_name,
             age:age,
             email:email,
             password:createHash(password)
         });
-        console.log(msgResp);
+        
         res.redirect(302,'/static/login');
     } catch (error) {
         console.log(error);

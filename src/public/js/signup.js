@@ -10,16 +10,10 @@ form.addEventListener('submit', (e) => {
             'Content-Type': 'application/json', // Indica que estás enviando datos en formato JSON
         },
         body:JSON.stringify({...dat}), // body data type must match "Content-Type" header
-      })
-      .then(data=> data.json())
-      .then(dataParsed =>{
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'su registro fue exitoso',
-            showConfirmButton: true,
-            timer: 1500
-        })
-      }).catch(err=>console.log(err));
+      }).then(resp=>{
+          if(resp.redirected){
+              window.location.href = resp.url;
+          }
+      }).catch(err => console.log(err))
     
 });
