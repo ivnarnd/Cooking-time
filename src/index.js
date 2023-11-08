@@ -1,14 +1,16 @@
 import 'dotenv/config.js';
 import  express from "express";
 import mongoose from "mongoose";
+import passport from 'passport';
+import path from 'path';
 import userRouter from "./routes/users.routes.js";
 import prodsRouter from "./routes/products.routes.js";
 import cartsRouter from "./routes/carts.routes.js";
+import initializePassport from './config/passport.config.js';
 import { messageModel } from "./models/messages.models.js";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { __dirname } from "./path.js";
-import path from 'path';
 
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";//importacion de conector de mongo 
@@ -70,8 +72,10 @@ app.use(session({
     resave:false,
     saveUninitialized:false 
 }));
-
-
+//configuracion de passport
+initializePassport();
+app.use(passsport.initialize());
+app.use(passport.session());
 //routes
 app.use('/api/users',userRouter);
 app.use('/api/products',prodsRouter);
