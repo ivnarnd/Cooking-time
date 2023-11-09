@@ -1,5 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
+import GithubStrategy from 'passport-github2';
 import { userModel } from "../models/users.models.js";
 import { createHash,validatePassword } from "../utils/utils.js";
 const localStrategy = local.Strategy;
@@ -52,6 +53,32 @@ const initializePassport = ()=>{
            }
        }
    ));
+   //Estrategia de autorizacion de github
+   passport.use('github', new GithubStrategy({
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.SECRET_CLIENT,
+    callbackURL: process.env.CALLBACK_URL
+}, async (accessToken, refreshToken, profile, done) => {
+    try {
+        const user = await userModel.findOne({ email: profile._json.email })
+        if (user) {
+            done(null, false)
+        } else {
+            const userCreated = await userModel.create({
+                first_name: profile._json.name,
+                last_name: ' ',
+                email: profile._json.email,
+                age: 18, //Edad por defecto
+                password: createHash(profile._json.email + profile._json.name)
+            })
+            done(null, userCreated)
+        }
+
+
+    } catch (error) {
+        done(error)
+    }
+}))
     //serializacion de usuario
     passport.serializeUser((user,done)=>{
         done(null,user._id);

@@ -27,7 +27,14 @@ sessionRouter.post('/login',passport.authenticate('login'),async(req,res)=>{
         res.status(400).send({error:`Error en login:${err}`});
     }
 });
+sessionRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }), async (req, res) => {
 
+})
+
+sessionRouter.get('/githubCallback', passport.authenticate('github'), async (req, res) => {
+    req.session.user = req.user;
+    res.status(200).send({ mensaje: "Usuario logueado"});
+})
 sessionRouter.get('/logout',async(req,res)=>{ 
     if(req.session.login){
         req.session.destroy();
