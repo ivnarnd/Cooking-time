@@ -1,6 +1,4 @@
 import { Router } from "express";
-import { userModel } from "../models/users.models.js";
-import {validatePassword} from '../utils/utils.js';
 import passport from "passport";
 const sessionRouter = Router();
 //ruta de registro de usuario
