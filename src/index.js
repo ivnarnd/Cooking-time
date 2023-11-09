@@ -84,7 +84,7 @@ app.use('/api/sessions',sessionRouter);
 
 //funcion de autenticacion de session
 function auth(req, res, next) {
- if (req.session?.infoUser) {
+ if (req.session?.user) {
    return next()
  }
  return res.status(401).send('error de autorización!')
