@@ -1,10 +1,32 @@
 import passport from "passport";
 import local from "passport-local";
 import GithubStrategy from 'passport-github2';
+import jwt from 'passport-jwt';
 import { userModel } from "../models/users.models.js";
 import { createHash,validatePassword } from "../utils/utils.js";
+
 const localStrategy = local.Strategy;
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt; //con esto se Extrae de las cookies el token
 const initializePassport = ()=>{
+    const cookieExtractor = req =>{
+        console.log(req.cookies)
+        const token = req.cookies.jwtCookie?req.cookies.jwtCookie:{}
+        console.log("cookieExtractor"+token)
+        return token
+    }
+    passport.use('jwt',new JWTStrategy({
+        jwtFromRequest:ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey:process.env.JWT_SECRET
+    },async(jwt_payload,done)=>{
+        try{
+            console.log("jwt",jwt_payload)
+            return done(null,jwt_payload)
+        }
+        catch(error){
+            return done(error)
+        }
+    }))
     //done sera el callback de resolucion de passport, el primer argumento es para error y el segundo para el usuario.
     passport.use('register',new localStrategy(
          //passReqToCallback permite que se pueda acceder al objeto req como un objeto

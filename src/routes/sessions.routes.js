@@ -39,5 +39,7 @@ sessionRouter.get('/logout',async(req,res)=>{
     }
     res.redirect(302,'/static/login');
 });
-
+sessionRouter.get('/current',passport.authenticate('jwt',{session:false}),(req,res)=>{
+    res.send(req.user)
+})
 export default sessionRouter;
