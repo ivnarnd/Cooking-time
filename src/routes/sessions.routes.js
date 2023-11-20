@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import { authorization,passportError} from "../utils/messagesError.js";
 const sessionRouter = Router();
 //ruta de registro de usuario
 sessionRouter.post('/register',passport.authenticate('register'),async(req,res)=>{
@@ -39,7 +40,10 @@ sessionRouter.get('/logout',async(req,res)=>{
     }
     res.redirect(302,'/static/login');
 });
-sessionRouter.get('/current',passport.authenticate('jwt',{session:false}),(req,res)=>{
+sessionRouter.get('/testJWT',passport.authenticate('jwt',{session:false}),(req,res)=>{
     res.send(req.user)
-})
+});
+sessionRouter.get('/current',passportError('jwt'),authorization('user'),(req,res)=>{
+    res.send(req.user);
+});
 export default sessionRouter;
