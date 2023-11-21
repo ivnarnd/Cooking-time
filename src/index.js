@@ -3,19 +3,15 @@ import  express from "express";
 import mongoose from "mongoose";
 import passport from 'passport';
 import path from 'path';
-import userRouter from "./routes/users.routes.js";
-import prodsRouter from "./routes/products.routes.js";
-import cartsRouter from "./routes/carts.routes.js";
 import initializePassport from './config/passport.config.js';
 import { messageModel } from "./models/messages.models.js";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { __dirname } from "./path.js";
-
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";//importacion de conector de mongo 
 import  session  from "express-session";
-import sessionRouter from './routes/sessions.routes.js';
+import indexRouter from './routes/index.routes.js';
 
 const app = express();
 const PORT=8080;
@@ -77,10 +73,7 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 //routes
-app.use('/api/users',userRouter);
-app.use('/api/products',prodsRouter);
-app.use('/api/carts',cartsRouter);
-app.use('/api/sessions',sessionRouter);
+app.use('/',indexRouter);
 
 //funcion de autenticacion de session
 function auth(req, res, next) {
