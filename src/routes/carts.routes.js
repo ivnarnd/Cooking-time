@@ -27,14 +27,14 @@ cartsRouter.get('/:cid',async(req,res)=>{
         res.status(400).send({resp:'Error en consultar por un carrito',message:'Not found'});
     }
 });
-cartsRouter.post('/',async(req,res)=>{
-    try {
-        const msgResp = await cartModel.create({});
-        res.status(200).send({resp:'Ok',message:msgResp});
-    } catch (error) {
-        res.status(400).send({resp:'Error en Crear Carrito',message:error})
-    }
-});
+// cartsRouter.post('/',async(req,res)=>{
+//     try {
+//         const msgResp = await cartModel.create({});
+//         res.status(200).send({resp:'Ok',message:msgResp});
+//     } catch (error) {
+//         res.status(400).send({resp:'Error en Crear Carrito',message:error})
+//     }
+// });
 cartsRouter.delete('/:cid/products/:pid',async (req,resp)=>{
     let {cid,pid} = req.params;
     try{
