@@ -10,9 +10,9 @@ const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt; //con esto se Extrae de las cookies el token
 const initializePassport = ()=>{
     const cookieExtractor = req =>{
-        console.log(req.cookies)
+        // console.log(req.cookies)
         const token = req.cookies.jwtCookie?req.cookies.jwtCookie:{}
-        console.log("cookieExtractor"+token)
+        //console.log("cookieExtractor"+token)
         return token
     }
     passport.use('jwt',new JWTStrategy({
@@ -20,7 +20,7 @@ const initializePassport = ()=>{
         secretOrKey:process.env.JWT_SECRET
     },async(jwt_payload,done)=>{
         try{
-            console.log("jwt",jwt_payload)
+            // console.log("jwt",jwt_payload)
             return done(null,jwt_payload)
         }
         catch(error){

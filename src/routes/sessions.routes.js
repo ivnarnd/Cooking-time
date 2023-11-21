@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import { generatejwt } from "../utils/jwt.js";
 import { authorization,passportError} from "../utils/messagesError.js";
 const sessionRouter = Router();
 //ruta de registro de usuario
@@ -20,6 +21,10 @@ sessionRouter.post('/login',passport.authenticate('login'),async(req,res)=>{
                 email:req.user.email,
                 age:req.user.age
             }
+            const token = generatejwt(req.user);//genero el token con el usuario
+            res.cookie('jwtCookie',token,{
+                maxAge:43200000 
+            });
             res.redirect(302,'/static/products');
         }
     }catch(err){
@@ -38,6 +43,7 @@ sessionRouter.get('/logout',async(req,res)=>{
     if(req.session.login){
         req.session.destroy();
     }
+    res.clearCookie('jwtCookie');
     res.redirect(302,'/static/login');
 });
 sessionRouter.get('/testJWT',passport.authenticate('jwt',{session:false}),(req,res)=>{
