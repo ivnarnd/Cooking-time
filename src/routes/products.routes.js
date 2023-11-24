@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { deleteProductById, getProductById, getProducts, postProduct, putProductById } from "../controllers/products.controller.js";
-
+import { passportError, authorization } from "../utils/messagesError.js";
 const prodsRouter = Router();
 
 prodsRouter.get('/',getProducts);
