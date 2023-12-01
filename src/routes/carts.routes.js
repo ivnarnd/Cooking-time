@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProduct, deleteProductInCart, editProduct, getCartById, getCarts, loadingCart } from "../controllers/carts.controller.js";
+import { addProduct, deleteProductInCart, editProduct, getCartById, getCarts, loadingCart, purchase } from "../controllers/carts.controller.js";
 import { passportError, authorization } from "../utils/messagesError.js";
 
 const cartsRouter = Router();
@@ -10,5 +10,6 @@ cartsRouter.delete('/:cid/products/:pid',passportError('jwt'),authorization('use
 cartsRouter.post('/:cid/product/:pid',passportError('jwt'),authorization('user'),addProduct);
 cartsRouter.put('/:cid',passportError('jwt'),authorization('admin'),loadingCart);
 cartsRouter.put('/:cid/products/:pid',passportError('jwt'),authorization('user'),editProduct);
+cartsRouter.post('/:cid/purchase',passportError('jwt'),authorization('user'),purchase);
 
 export default cartsRouter;

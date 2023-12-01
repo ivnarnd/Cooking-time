@@ -1,5 +1,6 @@
 import { cartModel } from "../models/carts.models.js";
 import { productModel } from "../models/products.models.js";
+import { ticketModel } from "../models/tickets.models.js";
 
 
 export const getCarts = async(req,res)=>{
@@ -125,5 +126,65 @@ export const editProduct = async (req,resp)=>{
         }
     }catch(error){
         resp.status(400).send({res:'Error en Editar producto',message:error});
+    }
+};
+export const purchase = async (req,res)=>{
+    let {cid} = req.params; //id del carrito
+    let purchaser = req.user.user.email; //email del usuario que genera el ticket
+    let montoTot = 0;//monto total para generacion de ticket
+    let prodsOK = [];//productos con stock disponible para la compra
+    let prodsSinStock = [];//productos sin stock
+    try{
+        //obtengo el carrito
+        let cart = await cartModel.findById(cid);
+        //si el carrito no existe
+        if (!cart){
+            res.status(404).send({res:'Error en Finalizacion de compra',message:`El Carrito con el id ${cid} no existe`});
+        }
+        //si el carrito no tiene productos
+        if (cart.products.length == 0){
+            res.status(404).send({res:'Error en Finalizacion de compra',message:`El Carrito con el id ${cid} no contiene productos agregados`});
+        }else{
+        //sino recorro todos los productos del carrito
+        for (let index = 0; index < cart.products.length; index++) {
+            const prod= cart.products[index];
+            const id = prod.id_prod;//id del producto agregado al carrito
+            let prodBD = await productModel.findById(id);//obtengo el producto de la bd
+            //si tengo stock disponible
+            if( prod.quantity <= prodBD.stock){
+                prodBD.stock = prodBD.stock - prod.quantity;//descuento el stock de la bd
+                //actualizo el producto en la bd
+                await productModel.findByIdAndUpdate(id,prodBD);
+                //actualizo el montoTotal
+                montoTot = montoTot + (prod.quantity * prodBD.price )
+                //actualizo la quantity de los que se realizaron
+                prod.quantity = 0;
+                
+            }else{
+                //almaceno el producto que no pudo ser comprado
+                prodsSinStock.push(prod);
+            }
+                
+        }
+        //si hay productos con stock para la compra
+        if(montoTot>0){
+            //creo el ticket
+            let ticketok = await ticketModel.create({amount:montoTot,purchaser:purchaser});
+            if(ticketok){
+                // actualizo cart con los productos que quedaron sin vender
+                cart.products = prodsSinStock;
+                let productsok = await cartModel.findByIdAndUpdate(cid,cart);
+                if (productsok){
+                    res.status(200).send({message:"exito"});
+                }
+            }
+        }else{
+            return res.status(400).send({ message: `No hay suficiente stock para los productos del carrito` });
+        }
+
+        }
+    }
+    catch(error){
+        res.status(400).send({res:'Error en Finalizacion del carrito',message:error});
     }
 };
