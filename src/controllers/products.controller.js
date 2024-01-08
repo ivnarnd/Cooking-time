@@ -1,6 +1,14 @@
 import { productModel } from "../models/products.models.js";
-
-
+import createProducts  from "../models/mockingProducts.js";
+export const mockingProducts = (req,res) => {
+  try {
+    let products = createProducts(100);
+    res.status(200).send({resp:'Ok',message:products})
+  } catch (error) {
+    res.status(400).send({resp:'Error en consultar Productos Mocking',message:error})
+  }
+    
+}
 export const getProducts = async(req,res)=>{
     const{limit,page,query,value,sort} = req.query;
     const sortS = sort? sort:'';
