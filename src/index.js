@@ -12,10 +12,19 @@ import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";//importacion de conector de mongo 
 import  session  from "express-session";
 import indexRouter from './routes/index.routes.js';
+import setEnvironment from './config/env.config.js';
+import { Command } from 'commander';
 
 const app = express();
-const PORT=8080;
+//inicializacion de un nuevo comander
+const program = new Command();
+program
+    .option('--mode <mode>','modo de trabajo','production')
+program.parse()//cierre de configuracion de de comander
 
+const environment = setEnvironment(program.opts().mode);
+
+const PORT=environment.PORT;
 //Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
