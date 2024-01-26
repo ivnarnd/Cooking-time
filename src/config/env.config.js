@@ -5,6 +5,7 @@ const setEnvironment = (environment)=>{
         path:environment==='development'?'./.env.development':'./.env.production'
     });
     return {
+        ENVIRONMENT:process.env.ENVIRONMENT,
         URL_CODE :  process.env.URL_CODE,
         PASS_COOKIE:process.env.PASS_COOKIE,
         PASS_SESSION:process.env.PASS_SESSION,

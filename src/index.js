@@ -14,6 +14,7 @@ import  session  from "express-session";
 import indexRouter from './routes/index.routes.js';
 import setEnvironment from './config/env.config.js';
 import { Command } from 'commander';
+import { addLogger } from './config/logger.js';
 
 const app = express();
 //inicializacion de un nuevo comander
@@ -26,8 +27,9 @@ const environment = setEnvironment(program.opts().mode);
 
 const PORT=environment.PORT;
 //Middleware
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(addLogger);
 const server = app.listen(PORT,()=>console.log(`Servidor corriendo en puerto:${PORT}`));
 
 const io = new Server(server);
@@ -137,3 +139,13 @@ app.get('/static/profile',auth,(req,res)=>{
     })
 });
 
+//test de Logger
+app.get('/loggerTest',(req,res)=>{
+    req.logger.fatal('¡Alerta de fatal!');
+    req.logger.error('¡Alerta de error!');
+    req.logger.warning('¡Alerta de warning!');
+    req.logger.info('¡Alerta de info!');
+    req.logger.http('¡Alerta de http!');
+    req.logger.debug('¡Alerta de debug!');
+    res.send({message:'Prueba de logger'});
+})
