@@ -29,6 +29,10 @@ const userSchema = new Schema({
     cart:{
         type:Schema.Types.ObjectId,
         ref:'carts'
+    },
+    premium:{
+        type:Boolean,
+        default:false
     }
     
 });
