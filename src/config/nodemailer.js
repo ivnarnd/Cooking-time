@@ -5,14 +5,14 @@ let transport = nodemailer.createTransport({
     port:465,
     secure:true,
     auth:{
-        user:'navisense23@gmail.com',
-        pass:'rnnv rvzk ksel xarj',
+        user:process.env.EMAIL_USER,
+        pass:process.env.PASS_EMAIL,
         authMethod:'LOGIN'
     }
 });
 export const sendRecoveryMail = (email, recoveryLink) => {
     const mailOptions = {
-        from: 'navisense23@gmail.com',
+        from: process.env.EMAIL_USER,
         to: email,
         subject: 'Link para reestablecer su contraseña',
         text: `Haga click en el siguiente enlace para reestablecer su contraseña: ${recoveryLink}`
