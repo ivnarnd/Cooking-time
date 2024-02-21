@@ -15,6 +15,8 @@ import indexRouter from './routes/index.routes.js';
 import setEnvironment from './config/env.config.js';
 import { Command } from 'commander';
 import { addLogger } from './config/logger.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 const app = express();
 //inicializacion de un nuevo comander
@@ -138,7 +140,20 @@ app.get('/static/profile',auth,(req,res)=>{
         user:req.session.infoUser
     })
 });
-
+//configuracion de swagger
+const swaggerOptions = {
+    definition:{
+        openapi:"3.0.1",
+        info:{
+            title:"Documentacion de Cooking Time",
+            description:"API pensada para Cooking Time Ventas"
+        }
+    },
+    apis:[`${__dirname}/docs/**/*.yaml`]
+    
+};
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/apidocs',swaggerUiExpress.serve,swaggerUiExpress.setup(specs));
 //test de Logger
 app.get('/loggerTest',(req,res)=>{
     req.logger.fatal('¡Alerta de fatal!');
